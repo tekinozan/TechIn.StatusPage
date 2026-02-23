@@ -1,0 +1,133 @@
+.uptime-bar.has-incidents {
+    cursor: pointer;
+}
+
+.uptime-bar.active-bar {
+    outline: 2px solid var(--text);
+    outline-offset: 1px;
+    border-radius: 3px;
+    z-index: 5;
+}
+
+.incident-panel {
+    margin-top: 10px;
+    background: var(--surface-raised, var(--surface));
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm, 8px);
+    padding: 14px 18px;
+    animation: fadeSlide 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: var(--shadow-md);
+}
+
+@keyframes fadeSlide {
+    from {
+        opacity: 0;
+        transform: translateY(-6px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.incident-panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+}
+
+.incident-panel-title {
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-muted);
+}
+
+.incident-panel-close {
+    background: none;
+    border: none;
+    color: var(--text-faint);
+    cursor: pointer;
+    font-size: 0.8rem;
+    padding: 2px 6px;
+    border-radius: 4px;
+    transition: color 0.2s ease, background 0.2s ease, transform 0.15s ease;
+}
+
+    .incident-panel-close:hover {
+        color: var(--text);
+        background: var(--border);
+        transform: scale(1.1);
+    }
+
+.incident-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 8px 0;
+}
+
+    .incident-item + .incident-item {
+        border-top: 1px solid color-mix(in srgb, var(--border) 40%, transparent);
+    }
+
+.incident-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-top: 4px;
+    flex-shrink: 0;
+}
+
+    .incident-dot.degraded {
+        background: var(--degraded);
+    }
+
+    .incident-dot.down {
+        background: var(--down);
+    }
+
+.incident-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.incident-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 2px;
+}
+
+.incident-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+}
+
+    .incident-label.degraded {
+        color: var(--degraded);
+    }
+
+    .incident-label.down {
+        color: var(--down);
+    }
+
+.incident-time {
+    font-family: 'JetBrains Mono', 'DM Mono', monospace;
+    font-size: 0.62rem;
+    color: var(--text-faint);
+}
+
+.incident-desc {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+    margin-top: 2px;
+}

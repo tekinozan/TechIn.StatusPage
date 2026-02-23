@@ -1,0 +1,17 @@
+<Project>
+  <PropertyGroup>
+    <Version>1.0.0</Version>
+    <Authors>TechIn</Authors>
+    <Company>TechIn</Company>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageTags>healthchecks;statuspage;diagnostics;aspnetcore</PackageTags>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageIcon>techin-icon.png</PackageIcon>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)README.md" Pack="true" PackagePath="\" />
+    
+    <None Include="$(MSBuildThisFileDirectory)techin-icon.png" Pack="true" PackagePath="\" />
+  </ItemGroup>
+</Project>

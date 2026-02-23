@@ -1,0 +1,13 @@
+<Solution>
+  <Folder Name="/samples/">
+    <Project Path="samples/SampleApp/SampleApp.csproj" Id="a38da907-d519-467d-a685-f3c57486898e" />
+  </Folder>
+  <Folder Name="/Solution Items/">
+    <File Path="Directory.Build.props" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="src/TechIn.StatusPage.Core/TechIn.StatusPage.Core.csproj" />
+    <Project Path="src/TechIn.StatusPage.UI/TechIn.StatusPage.UI.csproj" Id="d99f7afb-dc86-4030-9125-0b1c7df93d88" />
+    <Project Path="src/TechIn.StatusPage/TechIn.StatusPage.csproj" Id="cfb9d44a-54b8-4a06-9a97-95dcdd119030" />
+  </Folder>
+</Solution>
