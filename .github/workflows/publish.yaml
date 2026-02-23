@@ -1,6 +1,5 @@
 name: Publish NuGet Package
 
-# Sadece main dalına kod pushlandığında veya merge edildiğinde çalışır
 on:
     push:
         branches:
@@ -13,10 +12,10 @@ jobs:
             - name: 📥 Checkout Code
               uses: actions/checkout@v4
 
-            - name: ⚙️ Setup .NET 8
+            - name: ⚙️ Setup .NET 10
               uses: actions/setup-dotnet@v4
               with:
-                  dotnet-version: "8.0.x" # Projen .NET 8 ise böyle kalmalı
+                  dotnet-version: "10.0.x"
 
             - name: 📦 Restore Dependencies
               run: dotnet restore
