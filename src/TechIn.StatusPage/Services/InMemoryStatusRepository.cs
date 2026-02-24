@@ -3,7 +3,7 @@ using TechIn.StatusPage.Core.Interfaces;
 using TechIn.StatusPage.Core.Models;
 using TechIn.StatusPage.Core.Models.Enums;
 
-namespace TechIn.StatusPage.Hosting.Services;
+namespace TechIn.StatusPage.Services;
 
 /// <summary>
 /// Thread-safe in-memory implementation of <see cref="IStatusRepository"/>.
