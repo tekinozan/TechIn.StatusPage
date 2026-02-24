@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.Diagnostics.HealthChecks;
-using StatusPage.AspNetCore.Extensions;
 using TechIn.StatusPage.Core.Models.Enums;
-using TechIn.StatusPage.Hosting.Extensions;
+using TechIn.StatusPage.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
