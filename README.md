@@ -13,6 +13,22 @@ TechIn.StatusPage seamlessly transforms your native `.NET HealthChecks` into a s
 - **Zero Static Files:** Rendered entirely dynamically. No need to pollute your `wwwroot` directory.
 - **Highly Customizable:** Control footers, auto-refresh intervals, and retention days right from your `Program.cs`.
 
+## 🎨 Screenshots & Themes
+
+TechIn.StatusPage comes with multiple built-in themes to match your brand aesthetic.
+
+|                **Axiom Template** (Dark, Developer-First)                 |
+| :-----------------------------------------------------------------------: |
+| <img src="assets/images/theme-axiom.png" alt="Axiom Theme" width="400px"> |
+
+|                 **Pulse Template** (Cyberpunk Aesthetic)                  |
+| :-----------------------------------------------------------------------: |
+| <img src="assets/images/theme-pulse.png" alt="Pulse Theme" width="400px"> |
+
+|                             **Classic Template**                              |
+| :---------------------------------------------------------------------------: |
+| <img src="assets/images/theme-classic.png" alt="Classic Theme" width="400px"> |
+
 ## 📦 Installation
 
 Install the main package via NuGet. This umbrella package automatically includes the required Core storage engine and the UI rendering library.

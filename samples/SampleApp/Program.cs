@@ -24,7 +24,7 @@ builder.Services.AddStatusPage(options =>
     options.FooterLinkUrl = "https://github.com/tekinozan";
 
     // Pick your template:
-    options.Template = StatusPageTemplate.Axiom;   // dark-first, developer-oriented
+    options.Template = StatusPageTemplate.Classic;   // dark-first, developer-oriented
     //options.Template = StatusPageTemplate.Pulse;   // cyber aesthetic
     // options.Template = StatusPageTemplate.Axiom; // clean, minimal
 
