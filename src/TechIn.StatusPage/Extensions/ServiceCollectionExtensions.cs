@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using TechIn.StatusPage.Core.Interfaces;
 using TechIn.StatusPage.Core.Models;
-using TechIn.StatusPage.Hosting.Services;
+using TechIn.StatusPage.Services;
 
 namespace TechIn.StatusPage.Extensions;
 
