@@ -8,7 +8,7 @@ namespace TechIn.StatusPage.Extensions;
 public static class ServiceCollectionExtensions
 {
     /// <summary>
-    /// Registers all services required for the Google-style status page.
+    /// Registers all services required for the status page.
     /// Call this in your <c>Program.cs</c> before building the app.
     /// </summary>
     /// <param name="services">The service collection.</param>

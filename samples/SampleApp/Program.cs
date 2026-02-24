@@ -22,6 +22,8 @@ builder.Services.AddStatusPage(options =>
     options.FooterText = "Powered By";
     options.FooterLinkText = "TechIn";
     options.FooterLinkUrl = "https://github.com/tekinozan";
+    // you can enable it if you want the page to update in real-time without user interaction.
+    options.ActivateAutoRefresh = false;
 
     // Pick your template:
     options.Template = StatusPageTemplate.Classic;   // dark-first, developer-oriented
