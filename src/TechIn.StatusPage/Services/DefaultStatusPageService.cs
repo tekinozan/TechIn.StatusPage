@@ -3,7 +3,7 @@ using TechIn.StatusPage.Core.Interfaces;
 using TechIn.StatusPage.Core.Models;
 using TechIn.StatusPage.Core.Models.Enums;
 
-namespace TechIn.StatusPage.Hosting.Services;
+namespace TechIn.StatusPage.Services;
 
 /// <summary>
 /// Default implementation of <see cref="IStatusPageService"/> that reads from

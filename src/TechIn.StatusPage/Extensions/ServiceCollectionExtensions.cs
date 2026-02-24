@@ -3,7 +3,7 @@ using TechIn.StatusPage.Core.Interfaces;
 using TechIn.StatusPage.Core.Models;
 using TechIn.StatusPage.Hosting.Services;
 
-namespace TechIn.StatusPage.Hosting.Extensions;
+namespace TechIn.StatusPage.Extensions;
 
 public static class ServiceCollectionExtensions
 {
