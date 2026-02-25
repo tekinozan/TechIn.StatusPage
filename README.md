@@ -1,191 +1,120 @@
-# TechIn.StatusPage Storage Providers
+# TechIn.StatusPage
 
-Storage providers for [TechIn.StatusPage](https://github.com/techin/statuspage) that persist health-check snapshots to a database. Each provider plugs in through the `StatusPageBuilder` API — pick one, add a connection string, and you're done.
+A beautiful, developer-first status page and health check dashboard for ASP.NET Core applications.
 
-## Available Providers
+TechIn.StatusPage seamlessly transforms your native `.NET HealthChecks` into a sleek, public-facing portal. It tracks uptime history, visualizes system stability, monitors latency, and automatically reports outages with a modern, minimalist interface.
 
-| Package                                   | Database       | NuGet                                                                                                                                                  |
-| ----------------------------------------- | -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `TechIn.StatusPage.UI.Storage.PostgreSQL` | PostgreSQL 12+ | [![NuGet](https://img.shields.io/nuget/v/TechIn.StatusPage.UI.Storage.PostgreSQL)](https://nuget.org/packages/TechIn.StatusPage.UI.Storage.PostgreSQL) |
-| `TechIn.StatusPage.UI.Storage.MySQL`      | MySQL 8+       | [![NuGet](https://img.shields.io/nuget/v/TechIn.StatusPage.UI.Storage.MySQL)](https://nuget.org/packages/TechIn.StatusPage.UI.Storage.MySQL)           |
-| `TechIn.StatusPage.UI.Storage.Sqlite`     | SQLite 3       | [![NuGet](https://img.shields.io/nuget/v/TechIn.StatusPage.UI.Storage.Sqlite)](https://nuget.org/packages/TechIn.StatusPage.UI.Storage.Sqlite)         |
+## ✨ Features
 
-## Quick Start
+- **Native Integration:** Hooks directly into `Microsoft.Extensions.Diagnostics.HealthChecks`. No new health check logic required.
+- **Uptime History:** Visualizes past system performance and partial outages over a configurable retention period.
+- **Multiple Themes:** Choose from beautifully crafted, responsive templates like `Axiom` (dark-first, developer-oriented) or `Pulse` (cyber aesthetic).
+- **Latency Tracking:** Displays real-time response times for your services.
+- **Zero Static Files:** Rendered entirely dynamically. No need to pollute your `wwwroot` directory.
+- **Highly Customizable:** Control footers, auto-refresh intervals, and retention days right from your `Program.cs`.
 
-### PostgreSQL
+## 🎨 Screenshots & Themes
 
-```bash
-dotnet add package TechIn.StatusPage.UI.Storage.PostgreSQL
-```
+TechIn.StatusPage comes with multiple built-in themes to match your brand aesthetic.
 
-```csharp
-builder.Services
-    .AddStatusPage(o => o.HistoryRetentionDays = 90)
-    .AddPostgreSqlStorage(builder.Configuration.GetConnectionString("StatusPage")!);
-```
+|                **Axiom Template** (Dark, Developer-First)                 |
+| :-----------------------------------------------------------------------: |
+| <img src="assets/images/theme-axiom.png" alt="Axiom Theme" width="400px"> |
 
-### MySQL
+|                 **Pulse Template** (Cyberpunk Aesthetic)                  |
+| :-----------------------------------------------------------------------: |
+| <img src="assets/images/theme-pulse.png" alt="Pulse Theme" width="400px"> |
 
-```bash
-dotnet add package TechIn.StatusPage.UI.Storage.MySQL
-```
+|                             **Classic Template**                              |
+| :---------------------------------------------------------------------------: |
+| <img src="assets/images/theme-classic.png" alt="Classic Theme" width="400px"> |
 
-```csharp
-builder.Services
-    .AddStatusPage(o => o.HistoryRetentionDays = 90)
-    .AddMySqlStorage(builder.Configuration.GetConnectionString("StatusPage")!);
-```
+## 📦 Installation
 
-### SQLite
+Install the main package via NuGet. This umbrella package automatically includes the required Core storage engine and the UI rendering library.
 
 ```bash
-dotnet add package TechIn.StatusPage.UI.Storage.Sqlite
+dotnet add package TechIn.StatusPage
 ```
+
+_(Note: Ensure you also have your standard `AspNetCore.HealthChecks._` packages installed for the specific services you want to monitor).\*
+
+## 🚀 Quick Start & Configuration
+
+TechIn.StatusPage is designed to be highly configurable while requiring minimal setup. Add the services and map the endpoint in your `Program.cs`:
 
 ```csharp
-builder.Services
-    .AddStatusPage(o => o.HistoryRetentionDays = 90)
-    .AddSqliteStorage("Data Source=statuspage.db");
-```
+var builder = WebApplication.CreateBuilder(args);
 
-## How It Works
-
-Each provider registers three things behind the scenes:
-
-1. **DbContextFactory** — configured for the chosen database engine.
-2. **IStatusRepository** — the implementation that reads/writes health snapshots.
-3. **DatabaseMigrationHostedService** — automatically applies EF Core migrations when the application starts. No manual `dotnet ef database update` required in production.
-
-The base `AddStatusPage()` call registers the health-check collector, the status page service, and the default in-memory repository. The storage extension replaces the in-memory repository with a persistent one.
-
-## Database Schema
-
-All providers create a `snapshots` table with the following columns:
-
-| Column         | Type             | Description                             |
-| -------------- | ---------------- | --------------------------------------- |
-| `id`           | `bigint` (auto)  | Primary key                             |
-| `service_name` | `varchar(256)`   | Name of the monitored service           |
-| `status`       | `varchar(32)`    | `Operational`, `Degraded`, or `Down`    |
-| `timestamp`    | `datetimeoffset` | UTC timestamp of the health check       |
-| `latency`      | `timespan`       | Response time (nullable)                |
-| `description`  | `varchar(2048)`  | Error message or description (nullable) |
-
-PostgreSQL and SQL Server use the `status_page` schema. MySQL and SQLite store tables without a schema prefix.
-
-### Indexes
-
-- `ix_snapshots_service_name` — filters by service
-- `ix_snapshots_service_name_timestamp` — date-range queries per service
-- `ix_snapshots_timestamp` — purge operations
-
-## Migrations
-
-Migrations are bundled inside each provider package and applied automatically at startup. If you need to apply them manually:
-
-```bash
-# PostgreSQL
-dotnet ef database update \
-  --project src/TechIn.StatusPage.UI.Storage.PostgreSQL \
-  --framework net8.0
-
-# MySQL
-dotnet ef database update \
-  --project src/TechIn.StatusPage.UI.Storage.MySQL \
-  --framework net8.0
-
-# SQLite
-dotnet ef database update \
-  --project src/TechIn.StatusPage.UI.Storage.Sqlite \
-  --framework net8.0
-```
-
-## Configuration
-
-All providers respect the `StatusPageOptions` configured via `AddStatusPage()`:
-
-```csharp
+// 1. Configure TechIn Status Page Options
 builder.Services.AddStatusPage(options =>
 {
-    // How many days of snapshot history to keep (default: 90)
-    options.HistoryRetentionDays = 60;
+    options.Title = "Acme Corp";
+    options.HistoryRetentionDays = 90;
+    options.PollingIntervalSeconds = 30;
+    options.ShowLatency = true;
+    options.ActivateAutoRefresh = false;
+    options.ShowFooter = true;
+    options.FooterText = "Powered By";
+    options.FooterLinkText = "TechIn";
+    options.FooterLinkUrl = "https://github.com/tekinozan";
 
-    // Polling interval for health checks (default: 30 seconds)
-    options.PollingInterval = TimeSpan.FromSeconds(15);
-
-    // Filter which health checks to track
-    options.HealthCheckFilter = name => name != "self";
+    // Pick your template:
+    options.Template = StatusPageTemplate.Axiom;   // dark-first, developer-oriented
+    // options.Template = StatusPageTemplate.Pulse;   // cyber aesthetic
+    // options.Template = StatusPageTemplate.Axiom; // clean, minimal
 });
+
+// 2. Register your standard .NET Health Checks
+builder.Services.AddHealthChecks()
+    .AddRedis("localhost:6379", "Redis")
+    .AddCheck("API Server", () => HealthCheckResult.Healthy("Responding normally"))
+    .AddCheck("Database", () =>
+    {
+        // Simulate occasional degradation
+        return Random.Shared.Next(100) < 95
+            ? HealthCheckResult.Healthy("Connected (12ms)")
+            : HealthCheckResult.Degraded("Slow queries detected");
+    })
+    .AddCheck("Redis Cache", () => HealthCheckResult.Healthy("6 nodes online"))
+    .AddCheck("Payment Gateway", () =>
+    {
+        // Simulate rare downtime
+        return Random.Shared.Next(100) < 98
+            ? HealthCheckResult.Healthy("Stripe API OK")
+            : HealthCheckResult.Unhealthy("Connection timeout");
+    })
+    .AddCheck("Email Service", () => HealthCheckResult.Healthy("SendGrid OK"))
+    .AddCheck("Search Index", () =>
+    {
+        return Random.Shared.Next(100) < 90
+            ? HealthCheckResult.Healthy("Elasticsearch green")
+            : HealthCheckResult.Degraded("Yellow cluster state");
+    });
+
+var app = builder.Build();
+
+// 3. Map the TechIn Status Page UI endpoint
+app.MapStatusPage("/status");
+
+// Standard health endpoint still works perfectly
+app.MapHealthChecks("/health");
+
+// Optional: Redirect root to status page
+app.MapGet("/", () => Results.Redirect("/status"));
+
+app.Run();
+
 ```
 
-## Connection String Examples
+## 🏗️ Architecture
 
-### PostgreSQL
+This package is built with a clean, decoupled architecture:
 
-```
-Host=localhost;Port=5432;Database=statuspage;Username=app;Password=secret;
-```
+- **TechIn.StatusPage.Core:** The background publisher and state management engine (tracks history in-memory).
+- **TechIn.StatusPage.UI:** The dynamic Razor rendering layer.
+- **TechIn.StatusPage (Hosting):** The wrapper that brings them together with easy-to-use extension methods for your `Program.cs`.
 
-### MySQL
+## 📄 License
 
-```
-Server=localhost;Port=3306;Database=statuspage;User=app;Password=secret;
-```
-
-### SQLite
-
-```
-Data Source=statuspage.db
-```
-
-## Custom Repository
-
-If the built-in providers don't fit your needs, you can implement `IStatusRepository` and register it with `UseStatusRepository<T>()`:
-
-```csharp
-public class RedisStatusRepository : IStatusRepository
-{
-    // Your custom implementation
-    public Task SaveSnapshotsAsync(IEnumerable<HealthSnapshot> snapshots, CancellationToken ct = default) { ... }
-    public Task<IReadOnlyList<DayAggregate>> GetDailyAggregatesAsync(string serviceName, DateOnly from, DateOnly to, CancellationToken ct = default) { ... }
-    public Task<IReadOnlyList<HealthSnapshot>> GetLatestSnapshotsAsync(CancellationToken ct = default) { ... }
-    public Task<IReadOnlyList<string>> GetServiceNamesAsync(CancellationToken ct = default) { ... }
-    public Task PurgeOlderThanAsync(DateOnly cutoff, CancellationToken ct = default) { ... }
-}
-```
-
-```csharp
-builder.Services
-    .AddStatusPage(o => o.HistoryRetentionDays = 90)
-    .UseStatusRepository<RedisStatusRepository>(ServiceLifetime.Singleton);
-```
-
-This replaces the default in-memory repository (or any previously registered provider) with your implementation. You can combine this with any additional service registrations your repository needs:
-
-```csharp
-var statusPage = builder.Services.AddStatusPage();
-
-// Register your dependencies
-builder.Services.AddSingleton<IConnectionMultiplexer>(
-    ConnectionMultiplexer.Connect("localhost"));
-
-// Swap in your repository
-statusPage.UseStatusRepository<RedisStatusRepository>(ServiceLifetime.Singleton);
-```
-
-## Choosing a Provider
-
-| Scenario                       | Recommended         |
-| ------------------------------ | ------------------- |
-| Production, multi-instance     | PostgreSQL          |
-| Existing MySQL infrastructure  | MySQL               |
-| Single-instance, minimal setup | SQLite              |
-| Development / testing          | In-memory (default) |
-
-## Target Frameworks
-
-All packages target `net8.0` and `net9.0`. The PostgreSQL and SQLite packages also support `net10.0`.
-
-## License
-
-See [LICENSE](LICENSE) for details.
+This project is licensed under the MIT License.
