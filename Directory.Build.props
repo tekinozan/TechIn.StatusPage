@@ -1,20 +1,16 @@
 <Project>
   <PropertyGroup>
-    <Version>1.1.2</Version>
+    <Version>1.2.0</Version>
     <Authors>TechIn</Authors>
     <Company>TechIn</Company>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageTags>healthchecks;statuspage;diagnostics;aspnetcore</PackageTags>
-    <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageIcon>techin-icon.png</PackageIcon>
-    <Description>A beautiful, developer-first API status page and health check UI for ASP.NET Core applications.</Description>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="$(MSBuildThisFileDirectory)README.md" Pack="true" PackagePath="\" />
-    
     <None Include="$(MSBuildThisFileDirectory)techin-icon.png" Pack="true" PackagePath="\" />
   </ItemGroup>
 </Project>

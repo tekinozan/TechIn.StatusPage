@@ -26,37 +26,40 @@ public static class EndpointRouteBuilderExtensions
     /// <param name="endpoints">The endpoint route builder.</param>
     /// <param name="path">URL path for the status page (default: <c>/status</c>).</param>
     /// <returns>A convention builder for further customization.</returns>
-    public static IEndpointRouteBuilder MapStatusPage(
+    public static IEndpointConventionBuilder MapStatusPage(
         this IEndpointRouteBuilder endpoints,
         string path = "/status")
     {
         var normalizedPath = path.TrimEnd('/');
 
+
         // JSON API endpoint
-        endpoints.MapGet($"{normalizedPath}/api", async (HttpContext context, CancellationToken ct) =>
-        {
-            var service = context.RequestServices.GetRequiredService<IStatusPageService>();
-            var response = await service.GetStatusAsync(ct);
-            context.Response.ContentType = "application/json";
-            context.Response.Headers.CacheControl = "no-cache, no-store";
-            await JsonSerializer.SerializeAsync(context.Response.Body, response, JsonOptions, ct);
-        })
-        .ExcludeFromDescription(); // Hide from OpenAPI/Swagger
+        var builder = 
+            endpoints.MapGet($"{normalizedPath}/api", async (HttpContext context, CancellationToken ct) =>
+            {
+                var service = context.RequestServices.GetRequiredService<IStatusPageService>();
+                var response = await service.GetStatusAsync(ct);
+                context.Response.ContentType = "application/json";
+                context.Response.Headers.CacheControl = "no-cache, no-store";
+                await JsonSerializer.SerializeAsync(context.Response.Body, response, JsonOptions, ct);
+            })
+            .ExcludeFromDescription(); // Hide from OpenAPI/Swagger
 
         // HTML UI endpoint
-        endpoints.MapGet(normalizedPath, async (HttpContext context, CancellationToken ct) =>
-        {
-            var service = context.RequestServices.GetRequiredService<IStatusPageService>();
-            var options = context.RequestServices.GetRequiredService<IOptionsMonitor<StatusPageOptions>>();
-            var response = await service.GetStatusAsync(ct);
+        builder = 
+            endpoints.MapGet(normalizedPath, async (HttpContext context, CancellationToken ct) =>
+            {
+                var service = context.RequestServices.GetRequiredService<IStatusPageService>();
+                var options = context.RequestServices.GetRequiredService<IOptionsMonitor<StatusPageOptions>>();
+                var response = await service.GetStatusAsync(ct);
 
-            var html = StatusPageRenderer.Render(response, options.CurrentValue);
-            context.Response.ContentType = "text/html; charset=utf-8";
-            context.Response.Headers.CacheControl = "no-cache, no-store";
-            await context.Response.WriteAsync(html, ct);
-        })
-        .ExcludeFromDescription();
+                var html = StatusPageRenderer.Render(response, options.CurrentValue);
+                context.Response.ContentType = "text/html; charset=utf-8";
+                context.Response.Headers.CacheControl = "no-cache, no-store";
+                await context.Response.WriteAsync(html, ct);
+            })
+            .ExcludeFromDescription();
 
-        return endpoints;
+        return builder;
     }
 }

@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFrameworks>net8.0;net9.0;net10.0</TargetFrameworks>
+        <PackageId>TechIn.StatusPage.UI.Storage.MySQL</PackageId>
+        <Description>TechIn.StatusPage.UI.Storage.MySQL package containing MySQL database context definition</Description>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+    </PropertyGroup>
+
+    <ItemGroup Condition="'$(TargetFramework)' == 'net8.0'">
+        <PackageReference Include="MySql.EntityFrameworkCore" Version="8.0.22" />
+    </ItemGroup>
+    <ItemGroup Condition="'$(TargetFramework)' == 'net9.0'">
+        <PackageReference Include="MySql.EntityFrameworkCore" Version="9.0.0" />
+    </ItemGroup>
+    <ItemGroup Condition="'$(TargetFramework)' == 'net10.0'">
+        <PackageReference Include="MySql.EntityFrameworkCore" Version="10.0.1" />
+    </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\TechIn.StatusPage.UI.Data\TechIn.StatusPage.UI.Data.csproj" />
+    </ItemGroup>
+    
+    <ItemGroup>
+        <None Include="README.md" Pack="true" PackagePath="\" />
+    </ItemGroup>
+</Project>

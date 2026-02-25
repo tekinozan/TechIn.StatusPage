@@ -1,11 +1,12 @@
-﻿using Microsoft.Extensions.Diagnostics.HealthChecks;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System.Diagnostics;
+using TechIn.StatusPage.Core.Extensions;
 using TechIn.StatusPage.Core.Interfaces;
 using TechIn.StatusPage.Core.Models;
-using TechIn.StatusPage.Core.Extensions;
 
 namespace TechIn.StatusPage.Services;
 
@@ -16,18 +17,20 @@ namespace TechIn.StatusPage.Services;
 public sealed class HealthHistoryCollector : BackgroundService
 {
     private readonly HealthCheckService _healthCheckService;
-    private readonly IStatusRepository _repository;
+    private readonly IServiceScopeFactory _scopeFactory;
     private readonly IOptionsMonitor<StatusPageOptions> _options;
     private readonly ILogger<HealthHistoryCollector> _logger;
+    private DateTime _lastPurge = DateTime.MinValue;
+    private static readonly TimeSpan PurgeInterval = TimeSpan.FromHours(24);
 
     public HealthHistoryCollector(
         HealthCheckService healthCheckService,
-        IStatusRepository repository,
+        IServiceScopeFactory scopeFactory,
         IOptionsMonitor<StatusPageOptions> options,
         ILogger<HealthHistoryCollector> logger)
     {
         _healthCheckService = healthCheckService;
-        _repository = repository;
+        _scopeFactory = scopeFactory;
         _options = options;
         _logger = logger;
     }
@@ -79,15 +82,21 @@ public sealed class HealthHistoryCollector : BackgroundService
             })
             .ToList();
 
+        using var scope = _scopeFactory.CreateScope();
+        var repository = scope.ServiceProvider.GetRequiredService<IStatusRepository>();
+
         if (snapshots.Count > 0)
         {
-            await _repository.SaveSnapshotsAsync(snapshots, ct);
+            await repository.SaveSnapshotsAsync(snapshots, ct);
             _logger.LogDebug("Collected {Count} health snapshots in {Elapsed}ms",
                 snapshots.Count, sw.ElapsedMilliseconds);
         }
 
-        // Periodic purge (runs every cycle but is cheap)
-        var cutoff = DateOnly.FromDateTime(DateTime.UtcNow.AddDays(-_options.CurrentValue.HistoryRetentionDays));
-        await _repository.PurgeOlderThanAsync(cutoff, ct);
+        if (DateTime.UtcNow - _lastPurge > PurgeInterval)
+        {
+            var cutoff = DateOnly.FromDateTime(DateTime.UtcNow.AddDays(-_options.CurrentValue.HistoryRetentionDays));
+            await repository.PurgeOlderThanAsync(cutoff, ct);
+            _lastPurge = DateTime.UtcNow;
+        }
     }
 }
