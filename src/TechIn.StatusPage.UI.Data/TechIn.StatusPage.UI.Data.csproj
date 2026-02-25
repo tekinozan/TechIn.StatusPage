@@ -25,4 +25,8 @@
     <ItemGroup>
       <ProjectReference Include="..\TechIn.StatusPage.Core\TechIn.StatusPage.Core.csproj" />
     </ItemGroup>
+
+    <ItemGroup>
+        <None Include="README.md" Pack="true" PackagePath="\" />
+    </ItemGroup>
 </Project>

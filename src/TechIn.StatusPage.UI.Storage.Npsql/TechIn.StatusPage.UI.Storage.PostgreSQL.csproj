@@ -18,4 +18,8 @@
     <ItemGroup>
       <ProjectReference Include="..\TechIn.StatusPage.UI.Data\TechIn.StatusPage.UI.Data.csproj" />
     </ItemGroup>
+
+    <ItemGroup>
+        <None Include="README.md" Pack="true" PackagePath="\" />
+    </ItemGroup>
 </Project>
