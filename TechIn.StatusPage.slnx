@@ -7,6 +7,10 @@
   </Folder>
   <Folder Name="/src/">
     <Project Path="src/TechIn.StatusPage.Core/TechIn.StatusPage.Core.csproj" />
+    <Project Path="src/TechIn.StatusPage.UI.Data/TechIn.StatusPage.UI.Data.csproj" Id="93f02b33-0c23-4841-82e6-74a4939d64a0" />
+    <Project Path="src/TechIn.StatusPage.UI.Storage.MySQL/TechIn.StatusPage.UI.Storage.MySQL.csproj" Id="54997608-2982-4016-976d-743c5d569c94" />
+    <Project Path="src/TechIn.StatusPage.UI.Storage.Npsql/TechIn.StatusPage.UI.Storage.PostgreSQL.csproj" Id="ac015150-f5b8-4efe-ace6-39cffcba0c5a" />
+    <Project Path="src/TechIn.StatusPage.UI.Storage.SQLite/TechIn.StatusPage.UI.Storage.SQLite.csproj" Id="d1780bd8-e882-4b8b-8e1f-23d649a4422f" />
     <Project Path="src/TechIn.StatusPage.UI/TechIn.StatusPage.UI.csproj" Id="d99f7afb-dc86-4030-9125-0b1c7df93d88" />
     <Project Path="src/TechIn.StatusPage/TechIn.StatusPage.csproj" Id="cfb9d44a-54b8-4a06-9a97-95dcdd119030" />
   </Folder>
